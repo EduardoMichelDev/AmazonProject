@@ -1,4 +1,4 @@
-
+import { cart as myCart} from "../data/cart";
 
 let productsHTML = '';
 
