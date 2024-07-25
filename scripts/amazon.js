@@ -27,7 +27,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-quantity-container js-quantity-selector-${product.id}">
-            <select>
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -43,7 +43,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart added-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -54,15 +54,18 @@ products.forEach((product) => {
           </button>
         </div>
   `;
+  //remember to add select at the end of the cass select
 
 });
 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+const addedMessageTimeouts = {};
+
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
-      const productId = button.dataset.productId;
+      const { productId } = button.dataset;
 
       let matchingItem;
 
@@ -71,13 +74,17 @@ document.querySelectorAll('.js-add-to-cart')
           matchingItem = item;
         }
       });
+      const quantitySelector = document.        querySelector(`.js-quantity-selector-${productId} select`);
+      console.log(quantitySelector);
+        const quantity = Number(quantitySelector.value);
+        console.log(quantity);
 
       if (matchingItem) {
         matchingItem.quantity += quantity;
       } else {
         cart.push({
-          productId: productId,
-          quantity: quantity
+          productId,
+          quantity//shorthand property
         });
       }
 
@@ -90,9 +97,20 @@ document.querySelectorAll('.js-add-to-cart')
       document.querySelector('.js-cart-quantity')
         .innerHTML = cartQuantity;
 
-      const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
-      const quantity = Number(quantitySelector.value);
-    
+        document.querySelector(`.added-${productId}`).classList.add('added-on');
+
+        const previousTimeoutId = addedMessageTimeouts[productId];
+        if (previousTimeoutId) {
+          clearTimeout(previousTimeoutId);
+        }
+  
+        const timeoutId = setTimeout(() => {
+          document.querySelector(`.added-${productId}`).classList.remove('added-on');
+        }, 2000);
+  
+        // Save the timeoutId for this product
+        // so we can stop it later if we need to.
+        addedMessageTimeouts[productId] = timeoutId;
+      });
     });
-    
-  });
+        
