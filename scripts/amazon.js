@@ -1,6 +1,9 @@
 import { cart, addtoCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
+import { calculateCartQuantity } from "../data/cart.js";
+
+
 
 let productsHTML = '';
 
@@ -66,17 +69,16 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 const addedMessageTimeouts = {};
 
-function updateCartQuantity(productId) {
-  let cartQuantity = 0;
+calculateCartQuantity()
 
-      cart.forEach((cartItem) => {
-        cartQuantity += cartItem.quantity;
-      });
 
-      document.querySelector('.js-cart-quantity')
-        .innerHTML = cartQuantity;
-
-        document.querySelector(`.added-${productId}`).classList.add('added-on');
+document.querySelectorAll('.js-add-to-cart')
+  .forEach((button) => {
+    button.addEventListener('click', () => {
+      const { productId } = button.dataset;
+      addtoCart(productId);
+      calculateCartQuantity();
+      document.querySelector(`.added-${productId}`).classList.add('added-on');
 
         const previousTimeoutId = addedMessageTimeouts[productId];
         if (previousTimeoutId) {
@@ -86,20 +88,8 @@ function updateCartQuantity(productId) {
         const timeoutId = setTimeout(() => {
           document.querySelector(`.added-${productId}`).classList.remove('added-on');
         }, 2000);
-  
         // Save the timeoutId for this product
         // so we can stop it later if we need to.
         addedMessageTimeouts[productId] = timeoutId;
-      
-}
-
-document.querySelectorAll('.js-add-to-cart')
-  .forEach((button) => {
-    button.addEventListener('click', () => {
-      const { productId } = button.dataset;
-      addtoCart(productId);
-      updateCartQuantity(productId);
-
-      
     });
   });  
