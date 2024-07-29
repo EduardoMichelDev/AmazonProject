@@ -69,7 +69,6 @@ export function renderOrderSummary() {
           </div>
   `;
   });
-  console.log(cartSummaryHTML);
 
   function deliveryOptionsHTML(matchingProduct, cartItem) {
     let html = '';
