@@ -21,7 +21,7 @@ export function addtoCart(productId) {
 
       cart.forEach((cartItem) => {
         if (productId === cartItem.productId) {
-          matchingItem = cart;
+          matchingItem = cartItem;
         }
       });
       const quantitySelector = document.        querySelector(`.js-quantity-selector-${productId} select`);
