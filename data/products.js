@@ -57,21 +57,33 @@ class Clothing extends Product{
     `
   }
 }
-const product1 = new Product({
-  id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-    image: "images/products/athletic-cotton-socks-6-pairs.jpg",
-    name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
-    rating: {
-      stars: 4.5,
-      count: 87
-    },
-    priceCents: 1090,
-    keywords: [
-      "socks",
-      "sports",
-      "apparel"
-    ]
-});
+/*
+const date = new Date();
+console.log(date);
+
+console.log(date.toLocaleTimeString());
+*/
+
+// console.log(this);
+
+// const object2 = {
+//   a: 2,
+//   b: this.a
+// };//this doesnt work here because at the moment we try to use it, a doesnt exist
+
+// function logThis() {
+//   console.log(this);
+// }//this points to the parameter
+// logThis();//because this doesnt exist this is undefined
+// logThis.call('hello');//with call, this is stablished to 'hello', then we get the envolvent object string {'hello'}
+// //.call allow us to change 'this' to whatever we want
+// //this doesnt work with arrow function
+// const object3 = {
+//   method: () => {
+//     console.log(this);
+//   }
+// }//this will have same value as outside the arrow function
+// object3.method();
 
 export const products = [
   {
