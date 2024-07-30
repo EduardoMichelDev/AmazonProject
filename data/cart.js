@@ -1,4 +1,9 @@
-export let cart = JSON.parse(localStorage.getItem('cart'));
+export let cart;
+
+loadFromStorage();
+
+export function loadFromStorage() {
+  cart = JSON.parse(localStorage.getItem('cart'));
 
 if (!cart) {
   cart = [{
@@ -11,36 +16,58 @@ if (!cart) {
     deliveryOptionId: '2'
   }];
 };
+}
 
 function saveToStorage() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// export function addtoCart(productId) {
+//   let matchingItem;
+
+//       cart.forEach((cartItem) => {
+//         if (productId === cartItem.productId) {
+//           matchingItem = cartItem;
+//         }
+//       });
+//       const quantitySelector = document.        querySelector(`.js-quantity-selector-${productId} select`);
+//       console.log(quantitySelector.value);
+//         const quantity = Number(quantitySelector.value);
+//         console.log(quantity);
+
+//       if (matchingItem) {
+//         matchingItem.quantity += quantity;
+//       } else {
+//         cart.push({
+//           productId,
+//           quantity,//shorthand property
+//           deliveryOptionId: '1'
+//         });
+//       };
+
+//     saveToStorage();
+// };
 export function addtoCart(productId) {
   let matchingItem;
 
-      cart.forEach((cartItem) => {
-        if (productId === cartItem.productId) {
-          matchingItem = cartItem;
-        }
-      });
-      const quantitySelector = document.        querySelector(`.js-quantity-selector-${productId} select`);
-      console.log(quantitySelector);
-        const quantity = Number(quantitySelector.value);
-        console.log(quantity);
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
 
-      if (matchingItem) {
-        matchingItem.quantity += quantity;
-      } else {
-        cart.push({
-          productId,
-          quantity,//shorthand property
-          deliveryOptionId: '1'
-        });
-      };
+  if (matchingItem) {
+    matchingItem.quantity += 1;
+  } else {
+    cart.push({
+      productId: productId,
+      quantity: 1,
+      deliveryOptionId: '1'
+    });
+  }
 
-    saveToStorage();
-};
+  saveToStorage();
+}
 
 export function removeFromCart(productId) {
   const newCart = [];
