@@ -1,14 +1,15 @@
 import { cart, addtoCart } from "../data/cart.js";
-import { products } from "../data/products.js";
+import { products, loadProducts } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 import { calculateCartQuantity } from "../data/cart.js";
 
+loadProducts(renderProductsGrid);
 
+function renderProductsGrid() {
+  let productsHTML = "";
 
-let productsHTML = '';
-
-products.forEach((product) => {
-  productsHTML += `
+  products.forEach((product) => {
+    productsHTML += `
     <div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
@@ -31,7 +32,9 @@ products.forEach((product) => {
             ${product.getPrice()}
           </div>
 
-          <div class="product-quantity-container js-quantity-selector-${product.id}">
+          <div class="product-quantity-container js-quantity-selector-${
+            product.id
+          }">
             <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
@@ -61,37 +64,35 @@ products.forEach((product) => {
           </button>
         </div>
   `;
-  //remember to add select at the end of the cass select
+    //remember to add select at the end of the cass select
+  });
 
-});
+  document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
+  const addedMessageTimeouts = {};
 
+  calculateCartQuantity();
 
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
-
-const addedMessageTimeouts = {};
-
-calculateCartQuantity()
-
-
-document.querySelectorAll('.js-add-to-cart')
-  .forEach((button) => {
-    button.addEventListener('click', () => {
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
       const { productId } = button.dataset;
       addtoCart(productId);
       calculateCartQuantity();
-      document.querySelector(`.added-${productId}`).classList.add('added-on');
+      document.querySelector(`.added-${productId}`).classList.add("added-on");
 
-        const previousTimeoutId = addedMessageTimeouts[productId];
-        if (previousTimeoutId) {
-          clearTimeout(previousTimeoutId);
-        }
-  
-        const timeoutId = setTimeout(() => {
-          document.querySelector(`.added-${productId}`).classList.remove('added-on');
-        }, 2000);
-        // Save the timeoutId for this product
-        // so we can stop it later if we need to.
-        addedMessageTimeouts[productId] = timeoutId;
+      const previousTimeoutId = addedMessageTimeouts[productId];
+      if (previousTimeoutId) {
+        clearTimeout(previousTimeoutId);
+      }
+
+      const timeoutId = setTimeout(() => {
+        document
+          .querySelector(`.added-${productId}`)
+          .classList.remove("added-on");
+      }, 2000);
+      // Save the timeoutId for this product
+      // so we can stop it later if we need to.
+      addedMessageTimeouts[productId] = timeoutId;
     });
-  });  
+  });
+}
